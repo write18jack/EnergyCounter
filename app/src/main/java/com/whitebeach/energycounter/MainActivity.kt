@@ -1,10 +1,19 @@
 package com.whitebeach.energycounter
 
+import android.content.res.Configuration
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
@@ -16,9 +25,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shadow
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.whitebeach.energycounter.ui.theme.AppTheme
 
@@ -27,8 +38,21 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
+            // 縦横画面を取得
+            // Configuration.ORIENTATION_PORTRAIT → 縦画面
+            // Configuration.ORIENTATION_LANDSCAPE → 横画面
+            val isVertical =
+                LocalConfiguration.current.orientation == Configuration.ORIENTATION_PORTRAIT
             AppTheme {
-                App()
+                if (isVertical) {
+                    // 縦画面のCompose
+                    //PortraitScreen()
+                    DraggableItemAtSpecificInitialPosition()
+                } else {
+                    // 横画面のCompose
+                    LandscapeScreen()
+
+                }
             }
         }
     }
@@ -36,11 +60,10 @@ class MainActivity : ComponentActivity() {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun App(){
+fun PortraitScreen() {
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = {
-
             CenterAlignedTopAppBar(
                 title = {
                     Text(
@@ -60,7 +83,7 @@ fun App(){
                 },
                 modifier = Modifier,
                 colors = TopAppBarColors(
-                    containerColor =  MaterialTheme.colorScheme.secondary,
+                    containerColor = MaterialTheme.colorScheme.secondary,
                     scrolledContainerColor = MaterialTheme.colorScheme.primary,
                     navigationIconContentColor = MaterialTheme.colorScheme.surface,
                     titleContentColor = MaterialTheme.colorScheme.surface,
@@ -73,4 +96,28 @@ fun App(){
             paddingValues = innerPadding
         )
     }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun LandscapeScreen() {
+    GridLandscapeTargets()
+
+//    Row(
+//        modifier = Modifier.fillMaxSize()
+//    ) {
+//        // 左側のペイン
+//        Column(
+//            modifier = Modifier
+//                .weight(1f) // 1:2 の比率で幅を分配
+//                .fillMaxHeight()
+//                .background(Color.LightGray)
+//                .padding(16.dp),
+//            verticalArrangement = Arrangement.Center
+//        ) {
+//            Text(text = "左側のコンテンツ", style = MaterialTheme.typography.headlineMedium)
+//            Spacer(modifier = Modifier.height(16.dp))
+//            Text(text = "詳細情報やリストなど", style = MaterialTheme.typography.bodyMedium)
+//        }
+//    }
 }
