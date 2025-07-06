@@ -20,6 +20,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -46,7 +47,10 @@ fun LandDragScreen(){
 
 @Composable
 fun CounterField(){
-    val spacerSize = 24.dp
+    val dropTargetSize = 90.dp
+    val spacerSize = 15.dp
+    // 3つのターゲットと2つのスペーサーの合計幅を計算
+    val gridWidth = (100.dp * 3) + (spacerSize * 2)
 
     Box(modifier = Modifier.fillMaxSize()) {
         // 横画面用のメインレイアウトをRowで作成
@@ -60,15 +64,15 @@ fun CounterField(){
             // MARK: - Left Drop Target
             Column(
                 modifier = Modifier
-                    .fillMaxHeight() // 縦方向にいっぱい
-                    .weight(1f) // 横方向は全体の25%の重み付け
-                    .padding(end = spacerSize),
+                    .fillMaxHeight()
+                    .padding(end = spacerSize)
+                    .width(150.dp),
                 horizontalAlignment = Alignment.End,
-                verticalArrangement = Arrangement.Top
+                verticalArrangement = Arrangement.Center
             ) {
                 MyDropTarget(
                     id = 0,
-                    modifier = Modifier.size(100.dp)
+                    modifier = Modifier.size(dropTargetSize)
                 ) {
                     Text(text = "0", fontSize = 60.sp)
                 }
@@ -78,7 +82,7 @@ fun CounterField(){
             Column(
                 modifier = Modifier
                     .fillMaxHeight()
-                    .weight(1.5f), // 横方向は全体の50%の重み付け
+                    .width(gridWidth),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center
             ) {
@@ -92,7 +96,7 @@ fun CounterField(){
                             val targetId = (rowIndex * 3) + colIndex + 1
                             MyDropTarget(
                                 id = targetId,
-                                modifier = Modifier.size(100.dp)
+                                modifier = Modifier.size(dropTargetSize)
                             ) {
                                 Text(text = "$targetId", fontSize = 60.sp)
                             }
@@ -112,14 +116,14 @@ fun CounterField(){
             Column(
                 modifier = Modifier
                     .fillMaxHeight()
-                    .weight(1f) // 横方向は全体の25%の重み付け
-                    .padding(start = spacerSize),
+                    .padding(start = spacerSize)
+                    .width(150.dp),
                 horizontalAlignment = Alignment.Start,
-                verticalArrangement = Arrangement.Bottom
+                verticalArrangement = Arrangement.Center
             ) {
                 MyDropTarget(
                     id = 10,
-                    modifier = Modifier.size(100.dp)
+                    modifier = Modifier.size(dropTargetSize)
                 ) {
                     Text(text = "10", fontSize = 60.sp)
                 }
@@ -130,8 +134,8 @@ fun CounterField(){
 
 @Composable
 fun DraggableItemImmediate() {
-    var offsetX by remember { mutableStateOf(0f) }
-    var offsetY by remember { mutableStateOf(0f) }
+    var offsetX by remember { mutableFloatStateOf(370f) }
+    var offsetY by remember { mutableFloatStateOf(200f) }
 
     Box(
         modifier = Modifier
